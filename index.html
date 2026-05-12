@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kermesse du 26 juin 2026 — Inscriptions</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rouge:#C0392B;--rouge-light:#E74C3C;--marine:#1B2A4A;--marine-light:#2C3E6B;
+  --or:#C8972A;--or-light:#F0C040;--creme:#FAF3E0;--creme-dark:#F0E6C8;
+  --blanc:#FFFFFF;--texte:#1B2A4A;--gris:#7f8c8d;
+  --vert-light:#e8f8ef;--orange-light:#fef3e2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--creme);color:var(--texte);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 15% 20%,rgba(192,57,43,.06) 0%,transparent 50%),radial-gradient(circle at 85% 80%,rgba(27,42,74,.06) 0%,transparent 50%);pointer-events:none;z-index:0}
+.app{max-width:480px;margin:0 auto;position:relative;z-index:1;min-height:100vh}
+.screen{display:none}.screen.active{display:block;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{background:var(--marine);padding:1.5rem 1.25rem 1.25rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,var(--rouge) 0,var(--rouge) 20px,var(--or) 20px,var(--or) 40px,var(--marine-light) 40px,var(--marine-light) 60px)}
+.guirlande{display:flex;justify-content:center;gap:6px;margin-bottom:.75rem}
+.guirlande span{display:inline-block;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:16px solid var(--rouge)}
+.guirlande span:nth-child(2){border-top-color:var(--or)}.guirlande span:nth-child(3){border-top-color:var(--marine-light)}
+.guirlande span:nth-child(4){border-top-color:var(--rouge)}.guirlande span:nth-child(5){border-top-color:var(--or)}
+.guirlande span:nth-child(6){border-top-color:var(--marine-light)}.guirlande span:nth-child(7){border-top-color:var(--rouge)}
+.hero h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;letter-spacing:.02em;line-height:1.1;margin-bottom:.35rem}
+.hero h1 .k{color:var(--rouge-light)}.hero h1 .e{color:var(--or-light)}.hero h1 .r{color:var(--blanc)}
+.hero h1 .m{color:var(--rouge-light)}.hero h1 .e2{color:var(--or-light)}.hero h1 .s{color:var(--blanc)}
+.hero h1 .s2{color:var(--rouge-light)}.hero h1 .e3{color:var(--or-light)}
+.hero-date{display:inline-block;background:var(--rouge);color:var(--blanc);font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;padding:.3rem 1.1rem;border-radius:2px;letter-spacing:.04em;margin-bottom:.5rem}
+.hero-sub{color:rgba(255,255,255,.65);font-size:.8rem;letter-spacing:.03em}
+
+/* CARDS & LAYOUT */
+.intro-card{margin:1rem;background:var(--blanc);border-radius:12px;border:1.5px solid var(--creme-dark);padding:1rem 1.1rem}
+.intro-card p{font-size:.875rem;line-height:1.7;color:var(--texte);margin-bottom:.6rem}
+.intro-card p:last-child{margin-bottom:0}
+.intro-card ul{padding-left:1.2rem;margin:.3rem 0 .6rem}
+.intro-card ul li{font-size:.875rem;line-height:1.7;color:var(--texte)}
+.intro-contact{display:flex;align-items:center;gap:8px;background:var(--creme);border-radius:8px;padding:.6rem .9rem;margin-top:.75rem;font-size:.85rem;font-weight:700;color:var(--marine)}
+.section-head{display:flex;align-items:center;gap:8px;padding:1.25rem 1rem .5rem}
+.section-head-line{flex:1;height:1px;background:var(--creme-dark)}
+.section-head-text{font-family:'Playfair Display',serif;font-size:.8rem;font-weight:700;color:var(--rouge);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+
+/* STANDS */
+.stand-card{margin:0 1rem 8px;background:var(--blanc);border:1.5px solid var(--creme-dark);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .1s}
+.stand-card:hover:not(.full):not(.reserved){border-color:var(--or);transform:translateY(-1px)}
+.stand-card.full{opacity:.55;cursor:default}.stand-card.reserved{cursor:default}
+.stand-header{padding:.8rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stand-name{font-size:.875rem;font-weight:700;color:var(--marine);line-height:1.3}
+.stand-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.badge{font-size:.7rem;padding:3px 9px;border-radius:20px;font-weight:700;white-space:nowrap}
+.badge-ok{background:var(--vert-light);color:#1a7a42}.badge-warn{background:var(--orange-light);color:#a05a00}
+.badge-full{background:#fde8e8;color:#a32d2d}.badge-reserved{background:var(--creme);color:var(--gris)}
+.chevron{font-size:1rem;color:var(--or);font-weight:700}
+
+/* CRENEAUX */
+.creneau-row{padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--creme-dark);cursor:pointer;transition:background .1s}
+.creneau-row:last-child{border-bottom:none}
+.creneau-row:hover:not(.disabled){background:var(--creme)}.creneau-row.disabled{opacity:.5;cursor:default}
+.creneau-label{font-size:.875rem;color:var(--texte);font-weight:600}.creneau-spots{font-size:.78rem;font-weight:700}
+
+/* FORM */
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;font-size:.85rem;color:var(--gris);cursor:pointer;padding:1rem 1rem .25rem;font-family:'Nunito',sans-serif;font-weight:600}
+.back-btn:hover{color:var(--marine)}
+.screen-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--marine);padding:.25rem 1rem .75rem}
+.screen-sub{font-size:.8rem;color:var(--gris);padding:0 1rem .75rem;margin-top:-.5rem}
+.form-wrap{padding:0 1rem 1.5rem}
+.selection-recap{background:var(--marine);color:var(--blanc);border-radius:10px;padding:.85rem 1rem;margin-bottom:1.25rem;font-size:.875rem}
+.selection-recap strong{font-weight:700;display:block;margin-bottom:3px}
+.selection-recap span{font-size:.78rem;color:rgba(255,255,255,.65)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.8rem;font-weight:700;color:var(--gris);margin-bottom:5px;letter-spacing:.02em}
+.field input{width:100%;padding:.65rem .9rem;border:1.5px solid var(--creme-dark);border-radius:8px;font-size:.9rem;font-family:'Nunito',sans-serif;color:var(--texte);background:var(--blanc);transition:border-color .15s}
+.field input:focus{outline:none;border-color:var(--or)}
+.err-msg{font-size:.8rem;color:var(--rouge);margin-bottom:12px;display:none;font-weight:600}
+.btn-main{display:block;width:calc(100% - 2rem);margin:0 1rem;padding:.85rem;background:var(--rouge);color:var(--blanc);border:none;border-radius:10px;font-size:1rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;letter-spacing:.02em;transition:background .15s,transform .1s}
+.btn-main:hover{background:var(--rouge-light);transform:translateY(-1px)}.btn-main.or{background:var(--or);color:var(--marine)}
+.btn-main.or:hover{background:var(--or-light)}
+
+/* GATEAU */
+.gateau-card{margin:1rem 1rem 0;background:var(--blanc);border:1.5px solid var(--or);border-radius:12px;padding:1rem 1.1rem 1.1rem}
+.gateau-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--marine);margin-bottom:.5rem}
+.gateau-card p{font-size:.85rem;color:var(--texte);line-height:1.65;margin-bottom:.5rem}
+.gateau-warn{background:var(--orange-light);border-radius:8px;padding:.6rem .85rem;font-size:.8rem;color:#7a4400;line-height:1.55;margin-bottom:.9rem;font-weight:600}
+
+/* SUCCES */
+.success-wrap{padding:2.5rem 1.25rem 2rem;text-align:center}
+.success-icon{width:64px;height:64px;background:var(--vert-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.75rem}
+.success-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--marine);margin-bottom:.5rem}
+.success-sub{font-size:.875rem;color:var(--gris);line-height:1.65;margin-bottom:1.5rem}
+.recap-card{background:var(--creme);border-radius:10px;padding:1rem;text-align:left;margin-bottom:1.5rem}
+.recap-row{display:flex;justify-content:space-between;font-size:.85rem;padding:4px 0;gap:8px}
+.recap-row span:first-child{color:var(--gris);flex-shrink:0}
+.recap-row span:last-child{color:var(--marine);font-weight:700;text-align:right}
+
+/* LOADING */
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(27,42,74,.6);z-index:999;align-items:center;justify-content:center}
+.loading-overlay.show{display:flex}
+.loading-box{background:var(--blanc);border-radius:14px;padding:1.5rem 2rem;text-align:center}
+.spinner{width:36px;height:36px;border:3px solid var(--creme-dark);border-top-color:var(--rouge);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto .75rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-box p{font-size:.875rem;color:var(--marine);font-weight:600}
+
+/* VUE PUBLIQUE */
+.vue-toggle-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:calc(100% - 2rem);margin:0 1rem;padding:.7rem 1rem;background:var(--blanc);border:1.5px solid var(--creme-dark);border-radius:10px;font-size:.875rem;font-weight:700;color:var(--marine);font-family:'Nunito',sans-serif;cursor:pointer;transition:border-color .15s}
+.vue-toggle-btn:hover{border-color:var(--or)}
+.count-badge{background:var(--rouge);color:var(--blanc);font-size:.7rem;padding:2px 7px;border-radius:20px;font-weight:700}
+.vue-panel{margin:.75rem 1rem 0}
+.refresh-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.refresh-btn{background:none;border:none;font-size:.75rem;color:var(--or);font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px}
+.last-update{font-size:.72rem;color:var(--gris)}
+.vue-stand-block{margin-bottom:10px;background:var(--blanc);border:1.5px solid var(--creme-dark);border-radius:12px;overflow:hidden}
+.vue-stand-hd{padding:.65rem 1rem;background:var(--marine);display:flex;align-items:center;justify-content:space-between}
+.vue-stand-hd-name{font-size:.8rem;font-weight:700;color:var(--blanc)}
+.vue-stand-hd-count{font-size:.75rem;color:rgba(255,255,255,.6)}
+.vue-cren-block{border-bottom:1px solid var(--creme-dark)}.vue-cren-block:last-child{border-bottom:none}
+.vue-cren-label{padding:.45rem 1rem;font-size:.75rem;font-weight:700;color:var(--or);background:var(--creme);border-bottom:1px solid var(--creme-dark);display:flex;align-items:center;justify-content:space-between}
+.vue-cren-spots{font-size:.7rem;color:var(--gris);font-weight:600}
+.vue-inscrits{padding:.4rem 1rem}
+.vue-inscrit-row{display:flex;align-items:center;gap:8px;padding:.3rem 0;border-bottom:1px solid var(--creme-dark);font-size:.82rem}
+.vue-inscrit-row:last-child{border-bottom:none}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--marine);color:var(--blanc);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;flex-shrink:0}
+.vue-inscrit-name{color:var(--marine);font-weight:700}
+.vue-inscrit-sub{color:var(--gris);font-size:.75rem}
+.vue-dispo-row{display:flex;align-items:center;gap:8px;padding:.3rem 0;font-size:.8rem;color:#1a7a42}
+.vue-dispo-dot{width:8px;height:8px;border-radius:50%;background:#1a7a42;flex-shrink:0}
+.vue-empty{padding:.5rem 0;font-size:.8rem;color:var(--gris);font-style:italic}
+.vue-gateau-block{margin-bottom:10px;background:var(--blanc);border:1.5px solid var(--or);border-radius:12px;overflow:hidden}
+.vue-gateau-hd{padding:.65rem 1rem;background:var(--or);display:flex;align-items:center;justify-content:space-between}
+.vue-gateau-list{padding:.5rem 1rem}
+.vue-gateau-row{display:flex;align-items:center;gap:8px;padding:.3rem 0;border-bottom:1px solid var(--creme-dark);font-size:.82rem}
+.vue-gateau-row:last-child{border-bottom:none}
+.vue-nobody{padding:1rem;font-size:.85rem;color:var(--gris);text-align:center;font-style:italic}
+
+/* ADMIN */
+.admin-btn{display:block;margin:1rem auto .25rem;background:none;border:none;font-size:.75rem;color:var(--gris);cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif}
+.admin-wrap{margin:.5rem 1rem 0;background:var(--blanc);border:1.5px solid var(--creme-dark);border-radius:12px;overflow:hidden}
+.admin-hd{padding:.75rem 1rem;border-bottom:1px solid var(--creme-dark);font-weight:700;font-size:.85rem;color:var(--marine);background:var(--creme)}
+.admin-row{padding:.55rem 1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--creme-dark);font-size:.78rem}
+.admin-row:last-child{border-bottom:none}
+.slot-pill{font-size:.7rem;padding:2px 7px;border-radius:20px;font-weight:700}
+.slot-ok{background:var(--vert-light);color:#1a7a42}.slot-warn{background:var(--orange-light);color:#a05a00}.slot-full{background:#fde8e8;color:#a32d2d}
+.spacer{height:1.5rem}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="loading-overlay" id="loading">
+    <div class="loading-box"><div class="spinner"></div><p id="loading-msg">Chargement…</p></div>
+  </div>
+
+  <div class="hero">
+    <div class="guirlande"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <h1><span class="k">K</span><span class="e">E</span><span class="r">R</span><span class="m">M</span><span class="e2">E</span><span class="s">S</span><span class="s2">S</span><span class="e3">E</span></h1>
+    <div class="hero-date">26 juin 2026</div>
+    <p class="hero-sub">Parents d'élèves — On a besoin de vous !</p>
+  </div>
+
+  <!-- ACCUEIL -->
+  <div id="screen-home" class="screen active">
+    <div class="intro-card" style="margin-top:1rem">
+      <p>Pour que cette fête soit une vraie réussite nous avons besoin de bras et de bonne humeur pour animer les stands tout au long de la kermesse.</p>
+      <ul>
+        <li>Sur le dernier créneau, le tenancier du stand sera chargé de ranger le matériel lié à l'activité.</li>
+      </ul>
+      <div class="intro-contact">📞 Contact pour précisions sur les stands : Laura — 06 24 24 61 51</div>
+    </div>
+
+    <div class="section-head"><div class="section-head-line"></div><div class="section-head-text">✦ Choisissez un stand ✦</div><div class="section-head-line"></div></div>
+    <div id="stands-list"></div>
+
+    <div class="section-head"><div class="section-head-line"></div><div class="section-head-text">✦ Buvette ✦</div><div class="section-head-line"></div></div>
+    <div class="gateau-card">
+      <h3>🎂 Fabrication gâteaux</h3>
+      <p>Les crêpes sont toujours très appréciées, merci de les garnir en amont et de nous préciser la garniture. Les gâteaux doivent pouvoir être dégustés sans assiette.</p>
+      <div class="gateau-warn">⚠️ Éviter : crumble, fondant chocolat ou autre gâteau à base de crème.</div>
+      <button class="btn-main or" onclick="showForm(null,null,true)">Je m'inscris pour apporter un gâteau</button>
+    </div>
+
+    <!-- VUE PUBLIQUE -->
+    <div style="margin-top:1.5rem">
+      <button class="vue-toggle-btn" onclick="toggleVue()">
+        <span>👥 Voir qui est déjà inscrit</span>
+        <span class="count-badge" id="total-badge">0</span>
+        <span id="vue-chevron">▼</span>
+      </button>
+      <div id="vue-panel" style="display:none">
+        <div class="vue-panel">
+          <div class="refresh-bar">
+            <span class="last-update" id="last-update">Chargement…</span>
+            <button class="refresh-btn" onclick="chargerInscriptions()">🔄 Actualiser</button>
+          </div>
+          <div id="vue-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="admin-btn" onclick="toggleAdmin()">vue organisatrice</button>
+    <div id="admin-panel" style="display:none">
+      <div class="admin-wrap">
+        <div class="admin-hd">Récapitulatif des places</div>
+        <div id="admin-list"></div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- CRENEAUX -->
+  <div id="screen-creneaux" class="screen">
+    <button class="back-btn" onclick="showHome()">← Retour</button>
+    <div class="screen-title" id="creneau-stand-name"></div>
+    <p class="screen-sub">Choisissez votre créneau horaire</p>
+    <div id="creneaux-list" style="padding:0 1rem 1.5rem"></div>
+  </div>
+
+  <!-- FORMULAIRE -->
+  <div id="screen-form" class="screen">
+    <button class="back-btn" onclick="backFromForm()">← Retour</button>
+    <div class="screen-title">Vos informations</div>
+    <div class="form-wrap">
+      <div id="selection-recap-box" class="selection-recap"></div>
+      <div class="field"><label>Prénom *</label><input type="text" id="f-prenom" placeholder="Ex : Marie"></div>
+      <div class="field"><label>Nom *</label><input type="text" id="f-nom" placeholder="Ex : Dupont"></div>
+      <div class="field"><label>Téléphone *</label><input type="tel" id="f-tel" placeholder="06 XX XX XX XX"></div>
+      <div class="field"><label>Prénom(s) enfant(s) et classe(s) *</label><input type="text" id="f-enfant" placeholder="Ex : Léa (CP), Tom (MS)"></div>
+      <div id="gateau-field" style="display:none">
+        <div class="field"><label>Quel gâteau apportez-vous ?</label><input type="text" id="f-gateau" placeholder="Ex : tarte aux pommes, crêpes nutella…"></div>
+      </div>
+      <div class="err-msg" id="err-msg"></div>
+    </div>
+    <button class="btn-main" onclick="submitForm()">Confirmer mon inscription</button>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- SUCCES -->
+  <div id="screen-success" class="screen">
+    <div class="success-wrap">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Inscription confirmée !</div>
+      <p class="success-sub">Merci pour votre participation.<br>Rendez-vous le vendredi 26 juin !</p>
+      <div id="success-recap" class="recap-card"></div>
+      <button class="btn-main" onclick="newInscription()">Nouvelle inscription</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwM7ithhIEEXKivOMwEYto624w3mh7M81SdQbpA9ZcSwPHn4QRYmtCVSOvJzAv7DeYFeg/exec';
+const CRENEAUX=['16h45 – 17h30','17h30 – 18h15','18h15 – 18h45 + rangement'];
+const STANDS=[
+  {id:'caisse',name:'Entrée – Caisse – Vente tickets',max:2,reserved:true},
+  {id:'buvette',name:'Buvette',max:4,reserved:false},
+  {id:'chamboule',name:'Chamboule tout',max:2,reserved:false},
+  {id:'clown',name:'Lancé tête de clown',max:1,reserved:false},
+  {id:'canard',name:'Pêche aux canards',max:1,reserved:false},
+  {id:'maquillage',name:'Maquillage',max:3,reserved:false},
+  {id:'creatif',name:'Stand créatif — clowns et masques',max:2,reserved:false},
+  {id:'aveugle',name:"Toucher à l'aveugle",max:1,reserved:false},
+  {id:'grenouille',name:'Jeu en bois — Grenouille tonneau',max:1,reserved:false},
+  {id:'piege',name:'Jeu en bois — Le piège',max:1,reserved:false},
+  {id:'table',name:'Jeu en bois — Table élastique',max:1,reserved:false},
+  {id:'p4',name:'Jeu en bois — Puissance 4 géant',max:1,reserved:false},
+  {id:'batons',name:'Jeu en bois — Jeu des bâtonnets',max:1,reserved:false},
+  {id:'spirale',name:'Jeu en bois — Parcours élec spirale',max:1,reserved:false},
+  {id:'equilibre',name:'Jeu en bois — Jeu équilibre',max:1,reserved:false},
+  {id:'aerobille',name:'Jeu en bois — Aérobille',max:1,reserved:false},
+  {id:'billard',name:'Jeu en bois — Billard carrousel',max:1,reserved:false},
+  {id:'cornhole',name:'Jeu en bois — Cornhole',max:1,reserved:false},
+  {id:'roulette',name:'Jeu en bois — La roulette',max:1,reserved:false},
+  {id:'tatouage',name:'Stand tatouage',max:2,reserved:false},
+  {id:'cirque',name:'Activités diverses cirque',max:1,reserved:false},
+];
+
+let bookings={},gateauxInscrits=[],vueOuverte=false;
+let selectedStand=null,selectedCreneau=null,gateauOnly=false;
+
+function gc(sid,ci){return(bookings[sid+'-'+ci]||[]).length;}
+function gi(sid,ci){return bookings[sid+'-'+ci]||[];}
+
+function setScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function showHome(){setScreen('screen-home');renderStands();}
+
+function renderStands(){
+  const list=document.getElementById('stands-list');list.innerHTML='';
+  STANDS.forEach(stand=>{
+    const allFull=CRENEAUX.every((_,i)=>gc(stand.id,i)>=stand.max);
+    const left=CRENEAUX.reduce((a,_,i)=>a+Math.max(0,stand.max-gc(stand.id,i)),0);
+    const card=document.createElement('div');
+    card.className='stand-card'+(allFull?' full':'')+(stand.reserved?' reserved':'');
+    let badge=stand.reserved?'<span class="badge badge-reserved">Délégués uniquement</span>':allFull?'<span class="badge badge-full">Complet</span>':left<=2?'<span class="badge badge-warn">'+left+' place'+(left>1?'s':'')+' restante'+(left>1?'s':'')+'</span>':'<span class="badge badge-ok">'+left+' places dispo</span>';
+    const chev=(!allFull&&!stand.reserved)?'<span class="chevron">›</span>':'';
+    card.innerHTML='<div class="stand-header"><span class="stand-name">'+stand.name+'</span><div class="stand-meta">'+badge+chev+'</div></div>';
+    if(!allFull&&!stand.reserved)card.onclick=()=>showCreneaux(stand);
+    list.appendChild(card);
+  });
+  renderAdmin();
+  if(vueOuverte)renderVue();
+  updateBadge();
+}
+
+function showCreneaux(stand){
+  selectedStand=stand;
+  document.getElementById('creneau-stand-name').textContent=stand.name;
+  const list=document.getElementById('creneaux-list');list.innerHTML='';
+  CRENEAUX.forEach((label,idx)=>{
+    const spots=stand.max-gc(stand.id,idx);const full=spots<=0;
+    const row=document.createElement('div');row.className='creneau-row'+(full?' disabled':'');
+    const col=full?'#a32d2d':spots===1?'#a05a00':'#1a7a42';
+    const txt=full?'Complet':spots===1?'1 place restante':spots+' places restantes';
+    row.innerHTML='<span class="creneau-label">'+label+'</span><span class="creneau-spots" style="color:'+col+'">'+txt+'</span>';
+    if(!full)row.onclick=()=>showForm(stand,idx,false);
+    list.appendChild(row);
+  });
+  setScreen('screen-creneaux');
+}
+
+function showForm(stand,ci,gm){
+  selectedStand=stand;selectedCreneau=ci;gateauOnly=gm;
+  const recap=document.getElementById('selection-recap-box');
+  if(gm){recap.innerHTML='<strong>Don de gâteau pour la buvette</strong><span>Précisez le gâteau apporté ci-dessous</span>';document.getElementById('gateau-field').style.display='block';}
+  else{recap.innerHTML='<strong>'+stand.name+'</strong><span>Créneau : '+CRENEAUX[ci]+'</span>';document.getElementById('gateau-field').style.display='none';}
+  ['f-prenom','f-nom','f-tel','f-enfant','f-gateau'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('err-msg').style.display='none';
+  setScreen('screen-form');
+}
+
+function backFromForm(){if(gateauOnly)showHome();else showCreneaux(selectedStand);}
+function showLoading(v,msg){document.getElementById('loading').classList.toggle('show',v);if(msg)document.getElementById('loading-msg').textContent=msg;}
+
+async function submitForm(){
+  const prenom=document.getElementById('f-prenom').value.trim();
+  const nom=document.getElementById('f-nom').value.trim();
+  const tel=document.getElementById('f-tel').value.trim();
+  const enfant=document.getElementById('f-enfant').value.trim();
+  const gateau=document.getElementById('f-gateau').value.trim();
+  const err=document.getElementById('err-msg');
+  if(!prenom||!nom||!tel||!enfant){err.textContent='Merci de remplir tous les champs obligatoires.';err.style.display='block';return;}
+  err.style.display='none';
+  if(!gateauOnly){const key=selectedStand.id+'-'+selectedCreneau;if((bookings[key]||[]).length>=selectedStand.max){err.textContent="Ce créneau vient d'être complet.";err.style.display='block';return;}}
+  const payload={prenom,nom,tel,enfant,gateau,type:gateauOnly?'Gâteau buvette':'Stand',stand:gateauOnly?'':selectedStand.name,creneau:gateauOnly?'':CRENEAUX[selectedCreneau]};
+  showLoading(true,'Envoi en cours…');
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    // Mise à jour locale immédiate
+    if(!gateauOnly){const key=selectedStand.id+'-'+selectedCreneau;if(!bookings[key])bookings[key]=[];bookings[key].push({prenom,nom,enfant});}
+    else{gateauxInscrits.push({prenom,nom,gateau});}
+    showLoading(false);
+    showSuccessScreen(payload);
+    // Recharge depuis sheet en arrière-plan
+    setTimeout(()=>chargerInscriptions(false),2000);
+  }catch(e){showLoading(false);err.textContent='Erreur réseau. Vérifiez votre connexion.';err.style.display='block';}
+}
+
+function showSuccessScreen(p){
+  const recap=document.getElementById('success-recap');
+  let h='<div class="recap-row"><span>Nom</span><span>'+p.prenom+' '+p.nom+'</span></div>';
+  h+='<div class="recap-row"><span>Téléphone</span><span>'+p.tel+'</span></div>';
+  h+='<div class="recap-row"><span>Enfant(s)</span><span>'+p.enfant+'</span></div>';
+  if(!gateauOnly){h+='<div class="recap-row"><span>Stand</span><span>'+p.stand+'</span></div><div class="recap-row"><span>Créneau</span><span>'+p.creneau+'</span></div>';}
+  if(p.gateau)h+='<div class="recap-row"><span>Gâteau</span><span>'+p.gateau+'</span></div>';
+  recap.innerHTML=h;setScreen('screen-success');
+}
+
+function newInscription(){showHome();}
+
+// ===== VUE PUBLIQUE =====
+async function chargerInscriptions(loader=true){
+  if(loader)showLoading(true,'Chargement…');
+  try{
+    const r=await fetch(SCRIPT_URL+'?t='+Date.now());
+    const d=await r.json();
+    if(d.status==='ok'){
+      bookings={};gateauxInscrits=[];
+      (d.inscriptions||[]).forEach(ins=>{
+        if(ins.type==='Gâteau buvette'){gateauxInscrits.push({prenom:ins.prenom,nom:ins.nom,gateau:ins.gateau});}
+        else if(ins.stand&&ins.creneau){
+          const stand=STANDS.find(s=>s.name===ins.stand);
+          const ci=CRENEAUX.indexOf(ins.creneau);
+          if(stand&&ci>=0){const key=stand.id+'-'+ci;if(!bookings[key])bookings[key]=[];bookings[key].push({prenom:ins.prenom,nom:ins.nom,enfant:ins.enfant||''});}
+        }
+      });
+      const now=new Date();
+      document.getElementById('last-update').textContent='Mis à jour à '+now.getHours()+'h'+String(now.getMinutes()).padStart(2,'0');
+    }
+  }catch(e){document.getElementById('last-update').textContent='Hors ligne — données locales';}
+  if(loader)showLoading(false);
+  renderStands();
+}
+
+function updateBadge(){
+  let t=Object.values(bookings).reduce((a,arr)=>a+arr.length,0)+gateauxInscrits.length;
+  document.getElementById('total-badge').textContent=t;
+}
+
+function toggleVue(){
+  vueOuverte=!vueOuverte;
+  document.getElementById('vue-panel').style.display=vueOuverte?'block':'none';
+  document.getElementById('vue-chevron').textContent=vueOuverte?'▲':'▼';
+  if(vueOuverte)chargerInscriptions();
+}
+
+function renderVue(){
+  const content=document.getElementById('vue-content');content.innerHTML='';
+  let hasContent=false;
+  STANDS.forEach(stand=>{
+    if(stand.reserved)return;
+    const anyInscrits=CRENEAUX.some((_,i)=>gc(stand.id,i)>0);
+    if(!anyInscrits)return;
+    hasContent=true;
+    const block=document.createElement('div');block.className='vue-stand-block';
+    const total=CRENEAUX.reduce((a,_,i)=>a+gc(stand.id,i),0);
+    block.innerHTML='<div class="vue-stand-hd"><span class="vue-stand-hd-name">'+stand.name+'</span><span class="vue-stand-hd-count">'+total+' inscrit'+(total>1?'s':'')+'</span></div>';
+    CRENEAUX.forEach((label,ci)=>{
+      const inscrits=gi(stand.id,ci);const left=stand.max-inscrits.length;
+      const cb=document.createElement('div');cb.className='vue-cren-block';
+      const sc=left===0?'#a32d2d':left===1?'#a05a00':'#1a7a42';
+      const st=left===0?'Complet':left===1?'1 place restante':left+' places restantes';
+      cb.innerHTML='<div class="vue-cren-label"><span>'+label+'</span><span class="vue-cren-spots" style="color:'+sc+'">'+st+'</span></div>';
+      const insDiv=document.createElement('div');insDiv.className='vue-inscrits';
+      if(inscrits.length===0){insDiv.innerHTML='<div class="vue-empty">Aucune inscription pour ce créneau</div>';}
+      else{
+        inscrits.forEach(p=>{
+          const ini=((p.prenom||'')[0]||'')+((p.nom||'')[0]||'');
+          const row=document.createElement('div');row.className='vue-inscrit-row';
+          row.innerHTML='<div class="avatar">'+ini.toUpperCase()+'</div><div><div class="vue-inscrit-name">'+p.prenom+' '+p.nom+'</div>'+(p.enfant?'<div class="vue-inscrit-sub">'+p.enfant+'</div>':'')+'</div>';
+          insDiv.appendChild(row);
+        });
+        for(let i=0;i<left;i++){const r=document.createElement('div');r.className='vue-dispo-row';r.innerHTML='<div class="vue-dispo-dot"></div><span>Place disponible</span>';insDiv.appendChild(r);}
+      }
+      cb.appendChild(insDiv);block.appendChild(cb);
+    });
+    content.appendChild(block);
+  });
+  if(gateauxInscrits.length>0){
+    hasContent=true;
+    const gb=document.createElement('div');gb.className='vue-gateau-block';
+    gb.innerHTML='<div class="vue-gateau-hd"><span style="font-size:.8rem;font-weight:700;color:var(--marine)">🎂 Gâteaux pour la buvette</span><span style="font-size:.75rem;color:var(--marine);font-weight:700">'+gateauxInscrits.length+' don'+(gateauxInscrits.length>1?'s':'')+'</span></div>';
+    const gl=document.createElement('div');gl.className='vue-gateau-list';
+    gateauxInscrits.forEach(g=>{
+      const ini=((g.prenom||'')[0]||'')+((g.nom||'')[0]||'');
+      const row=document.createElement('div');row.className='vue-gateau-row';
+      row.innerHTML='<div class="avatar" style="background:var(--or);color:var(--marine)">'+ini.toUpperCase()+'</div><div><div class="vue-inscrit-name">'+g.prenom+' '+g.nom+'</div>'+(g.gateau?'<div class="vue-inscrit-sub">'+g.gateau+'</div>':'')+'</div>';
+      gl.appendChild(row);
+    });
+    gb.appendChild(gl);content.appendChild(gb);
+  }
+  if(!hasContent){content.innerHTML='<div class="vue-nobody">Soyez le premier à vous inscrire ! 🎉</div>';}
+}
+
+function toggleAdmin(){const p=document.getElementById('admin-panel');p.style.display=p.style.display==='none'?'block':'none';}
+function renderAdmin(){
+  const list=document.getElementById('admin-list');list.innerHTML='';
+  STANDS.forEach(stand=>{
+    const row=document.createElement('div');row.className='admin-row';
+    const pills=CRENEAUX.map((_,i)=>{const c=gc(stand.id,i),m=stand.max,l=m-c;const cls=l===0?'slot-full':l===1?'slot-warn':'slot-ok';return '<span class="slot-pill '+cls+'">'+['16h45','17h30','18h15'][i]+' '+c+'/'+m+'</span>';}).join('');
+    row.innerHTML='<span style="color:var(--marine);max-width:55%;line-height:1.4;font-weight:600;font-size:.78rem">'+stand.name+'</span><div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end">'+pills+'</div>';
+    list.appendChild(row);
+  });
+}
+
+// Initialisation
+chargerInscriptions(false);
+showHome();
+setInterval(()=>chargerInscriptions(false),60000);
+</script>
+</body>
+</html>
